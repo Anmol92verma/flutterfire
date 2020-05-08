@@ -11,6 +11,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final FirebaseApp app = await FirebaseApp.configure(
     name: 'db2',
     options: Platform.isIOS
@@ -155,7 +156,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   Animation<double> animation, int index) {
                 return SizeTransition(
                   sizeFactor: animation,
-                  child: Text("$index: ${snapshot.value.toString()}"),
+                  child: ListTile(
+                    trailing: IconButton(
+                      onPressed: () =>
+                          _messagesRef.child(snapshot.key).remove(),
+                      icon: Icon(Icons.delete),
+                    ),
+                    title: Text(
+                      "$index: ${snapshot.value.toString()}",
+                    ),
+                  ),
                 );
               },
             ),
